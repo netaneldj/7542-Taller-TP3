@@ -1,10 +1,10 @@
-Recolectores y Productores
+Adivina el número
 ============
 
 **Alumno**:  Netanel David Jamilis           
 **Número de Padrón**: 99093            
 **Email**: njamilis@fi.uba.ar  
-**Github**: netaneldj/tp2
+**Github**: netaneldj/tp3
 
 
 Introducción
@@ -15,11 +15,15 @@ Objetivos
 
 Los objetivos del presente trabajo son los siguientes:
 
--   Diseño y construcción de sistemas orientados a objetos
+-   Diseño y construcción de sistemas con acceso distribuido
 
--   Diseño y construcción de sistemas con procesamiento concurrente
+-   Encapsulación de Threads y Sockets en Clases
+
+-   Definición de protocolos de comunicación
 
 -   Protección de los recursos compartidos
+
+-   Uso de buenas practicas de programación en C++
 
 En las siguientes secciones se verá plasmado el cumplimiento de los
 objetivos.
@@ -106,7 +110,7 @@ El objeto thread representa un hilo del programa. En el fondo cada trabajador es
 Diagrama ilustrativo
 ------------------------
 
-![\[fig:class01\]Proceso de Envio y Recepción de Mensajes](img/diagrama_secuencia_recolector_productor.png)
+
 
 Dificultades abordadas
 ------------------------
