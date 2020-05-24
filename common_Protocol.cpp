@@ -11,7 +11,7 @@
 #define ERROR_OUT_OF_RANGE "Error: archivo con números fuera de rango\n"
 #define ERROR_FORMAT "Error: formato de los números inválidos\n"
 #define INVALID_MSG "Número inválido. Debe ser de 3 cifras no repetidas"
-#define HELP_MSG "Comandos válidos:\n\tAYUDA: despliega la lista de comandos válidos\n\tRENDIRSE: pierde el juego automáticamente\n\tXXX: Número de tres cifras a ser enviado al servidor para adivinar el número secreto"
+#define HELP_MSG "Comandos válidos:\n\tAYUDA: despliega la lista de comandos válidos\n\tRENDIRSE: pierde el juego automáticamente\n\tXXX: Número de 3 cifras a ser enviado al servidor para adivinar el número secreto"
 #define LOSE_MSG "Perdiste"
 #define WIN_MSG "Ganaste"
 #define NUMBER_SIZE 4
