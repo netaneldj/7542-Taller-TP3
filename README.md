@@ -39,73 +39,75 @@ Desarrollo del proyecto
 Primeras impresiones
 ------------------------
 
-Al comienzo se me dificulto encarar la solución. No sabía por donde empezar a desarrollarla. En este trabajo además de sumarse la dificultad del manejo de Threads y el diseño orientado a objetos, se sumo la dificultad de tener que desarrollarlo en un nuevo lenguaje. 
-
-Luego de dedicarle varios dias a familiarizase con el nuevo lenguaje y cambiar la mentalidad de programación estructurada a orientada a objetos, comence a desarrollar los objetos en orden de complejidad ascendente. Partiendo desde los recursos y las herramientas auxiliares hasta los recolectores, productores y los objetos más complejos como el inventario.
+Al comienzo se me dificulto encarar la solución debido a la complejidad propia de un programa cliente-servidor sumado a que el servidor debe poder atender simultaneamente a multiples clientes. Nos simplifico un poco la tarea haber desarrollado previamente un programa cliente-servidor. Aunque el mismo haya sido desarrolado en otro lenguaje y debimos migrarlo al actual. Tambien nos simplifico la tarea haber trabajado antes con multihilos. Al ya tener desarrollados todos estos componentes nos ahorramos mucho tiempo de trabajo y pudimos completar la meta de tener listo el programa en tan solo una semana de trabajo. 
 
 Resolución adoptada
 ------------------------
 
 La solucón que implemente útiliza los siguientes objetos:
 
--   Poblado
+-   Client
 
--   Recurso
--   Carbon
--   Hierro
--   Madera
--   Trigo
+-   Server
+-   ClientTalker
+-   ClientManager
+-   TextFileInterpreter
 
--   Recolector
--   Agricultor
--   Leniador
--   Minero
+-   Protocol
 
--   Productor
--   Armero
--   Carpintero
--   Cocinero
+-   Command
+-   CommandHelp
+-   CommandNumber
+-   CommandString
+-   CommandSurrender
 
--   Inventario
--   Tablero
-
--   Cola Bloqueante
+-   Socket
 -   Thread
+
+-   Score
 
 A continuación explicare como utilice cada uno de ellos.
 
-### Poblado
+### Client
 
-El poblado es el objeto principal del programa. Este se encarga de ingresar los recursos que llegan por parametro a las colas, crear los trabajadores que se especifican en la entrada y mandarlos a trabajar. Tambien una vez finalizado el trabajo se encarga de unir los resultados parciales y mostrar las estadisticas por pantalla.  
+El Client es el objeto a través del cual el usuario se conecta al juego. Su rol es leer lo que el usuario ingresa por teclado, validarlo, enviarselo al servidor y esperar la respuesta para luego mostrarla por pantalla.
 
-### Recurso
+### Server
 
-El recurso es el elemento base el cual los trabajadores van a recolectar y los productores van a utilizar como materia prima para sus trabajos. Los diferentes tipos de recurso disponibles en este poblado son carbon, hierro, madera y trigo.
+El Server es el objeto al cúal se concentan todos los clientes. En esta ocasion decidí delegar su funcionamiento a otros objetos por lo que lo unico que hace es inicializarlos y leer la entrada estandar porque en caso de que reciba una letra 'q' finalizará el programa y mostrara por pantalla las estadisticas del juego.
 
-### Recolector
+### TextFileInterpreter
 
-El recolector es el encargado de recolectar el recurso de la cola bloqueante, trabajarlo y depositarlo en el inventario. Los diferentes tipos de recolectores son agricultor, leniador y minero. Cada uno recolecta sus recursos de una cola bloqueante diferente.
+El TextFileInterpreter es el encargado de leer el archivo que continene los números secretos, validarlos a traves del protocolo y guardarlos en una lista para su posterior utilización.
 
-### Productor
+### ClientManager
 
-El productor es el encargado de buscar los recursos del inventario, trabajarlos y convertirlos en puntos de beneficio. Los diferentes tipos de productores son armero, carpintero y cocinero. Cada uno necesita diferentes recursos en diferentes cantidades para realizar su trabajo y generar puntos de beneficio por ello.
+El ClientManager es el encargado de coordinar a todos los ClientTalker. Es quien los creara asignandoles el número secreto, iniciará y al finalizar la partida eliminará sus recursos. 
 
-### Inventario
+### ClientTalker
 
-El inventario es el deposito donde los recolectores almacenan sus materias primas y donde los productores las buscan para transformarlas en sus productos. Es el objeto más concurrido del programa ya que allí covergen todos los productores y recolectores. Por eso hay que tener un cuidado especial para que no se descontrole todo. Este orden se logra utilizando bloqueos para que solo pueda acceder u trabajador a la vez.
+El ClientTalker es el objeto a traves del cúal el Server interactua con cada Client. Por cada Client que se conecte el ClientManager creara una instancia de este objeto quien recibirá los mensajes, los procesara a traves del Protocol y enviara su respuesta.
 
-### Tablero
+### Protocol
 
-El tablero es el contador de puntos donde los productores depositan los puntos de beneficio obtenidos por su trabajo. Al igual que en el inventario hay que tener cuidado porque allí van a acceder todos los productores y no queremos que se pierdan ni que se sumen dos veces los puntos.
+El Protocol es el encargado de toda la logica de validación y encriptación del programa. Tambien a traves de él tanto el cliente como el servidor realizan envian y reciben sus mensajes ya que este objeto les realiza la encriptación y desencriptación de los mismos.
 
-### Cola Bloqueante
+### Command
 
-La cola bloqueante es el objeto donde se depositan los recursos recibidos por parametro y de donde los recolectores los tomaran para luego depositarlos en el inventario.
+El Command representa a cada comando que se puede enviar o recibir en el programa, existe uno por cada tipo. Una vez que el protocolo identifico el tipo de mensaje se desea enviar o recibir, le delega dicha tarea al comando correspondiente al tipo de mensaje ya que este sabe como enviarlo o recibirlo.
+
+
+### Socket
+
+El Socket es el encargado de establecer la comunicación entre los clientes y el servidor. El protocolo y los comandos lo utilizan para enviar y recibir los mensajes. A su vez el cliente lo utiliza para conectarse al servidor y el ClientManager lo utiliza para conectarse aceptar las conexiones de los clientes.
 
 ### Thread
 
-El objeto thread representa un hilo del programa. En el fondo cada trabajador es un hilo que trabaja en paralelo a los dems. Por eso en los espacios comunes como el inventario, la cola bloqueante o el tablero hay que tener especial cuidado que no se superpongan los diferentes pedidos de los trabajadores.
+El objeto thread representa un hilo del programa. En el fondo cada cliente es un hilo y el servidor crea un hilo por cada conexion que acepta. Por este motivo hay que tener especial cuidado a la hora de contar las victorias y derrotas en el juego porque puede ser se pisen los diferentes hilos a la hora de computar los resultados de los juegos.
 
+### Score
+
+El Score es el marcador donde se computan los resultados de los juegos. Acá hay que tener cuidado de que no se pisen los diferentes hilos y este marque un resultado erroneo. Para esto utilizamos mutex y condition variables.
 
 Diagrama ilustrativo
 ------------------------
@@ -117,8 +119,8 @@ Dificultades abordadas
 
 A lo largo de todo el trabajo me fui topando con una serie de dificultades que de no superarlas no superarlas no hubiese podido progresar con el trabajo. 
 
-Algunas de ellas se deberieron en la falta de conocimiento, como por ejemplo no saber como se manejan los threads o el uso compartido de memoria. 
+Algunas de ellas se deberieron en la falta de conocimiento, como por ejemplo no saber como aceptar multiples conexiones en un mismo servidor o como realizar un correcto manejo de errorres. 
 
-Otras se debieron a dificultades propias de un lenguaje nunca antes trabajado.
+Otras se debieron a dificultades propias de un diseño cliente-servidor como la construcción del protocolo.
 
 Por último, pero no menos importante se debieron enfrentar las problematicas tipicas de un diseño orientado a objetos como por ejemplo herencia de atributos privados, entre otros.
