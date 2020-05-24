@@ -22,7 +22,7 @@ void Score::addLoser() {
 }
 
 void Score::show() {
-	std::cout << "Estadísticas:\n\tGanadores: " << this->winers <<
+	std::cout << "Estadísticas:\n\tGanadores:  " << this->winers <<
 			"\n\tPerdedores: " << this->losers << "\n";
 }
 
