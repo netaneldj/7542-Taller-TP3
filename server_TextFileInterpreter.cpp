@@ -3,13 +3,15 @@
 #include <iostream>
 #include <fstream>
 
-TextFileInterpreter::TextFileInterpreter(Protocol p, std::string fileName, std::vector<std::string> &list) {
+TextFileInterpreter::TextFileInterpreter(Protocol p,
+		std::string fileName, std::vector<std::string> &list) {
 	this->process(p,fileName,list);
 }
 
 TextFileInterpreter::~TextFileInterpreter(){}
 
-void TextFileInterpreter::process(Protocol p, std::string fileName, std::vector<std::string> &list) {
+void TextFileInterpreter::process(Protocol p,
+		std::string fileName, std::vector<std::string> &list) {
 	std::ifstream File(fileName);
 	std::string line;
 

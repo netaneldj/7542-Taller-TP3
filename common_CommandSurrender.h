@@ -2,6 +2,7 @@
 #define COMMON_COMMANDSURRENDER_H_
 
 #include "common_Command.h"
+#include <string>
 
 class CommandSurrender : public Command {
 public:

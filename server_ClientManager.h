@@ -5,6 +5,8 @@
 #include "common_Socket.h"
 #include "common_Score.h"
 #include "server_ClientTalker.h"
+#include <vector>
+#include <string>
 #include <list>
 
 class ClientManager : public Thread {

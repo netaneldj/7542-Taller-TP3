@@ -6,7 +6,7 @@
 
 class Score {
 public:
-	Score(std::mutex &m);
+	explicit Score(std::mutex &m);
 
 	~Score();
 

@@ -1,5 +1,6 @@
 #include "common_CommandHelp.h"
 #include <iostream>
+#include <string>
 
 CommandHelp::CommandHelp() {}
 

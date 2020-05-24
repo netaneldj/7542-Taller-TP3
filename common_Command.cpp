@@ -4,9 +4,7 @@ Command::Command() {}
 
 Command::~Command() {}
 
-void Command::send(Socket &skt, std::string message) {
-
-}
+void Command::send(Socket &skt, std::string message) {}
 
 std::string Command::receive(char* response, size_t length) {
 	return "";

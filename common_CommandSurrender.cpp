@@ -1,4 +1,5 @@
 #include "common_CommandSurrender.h"
+#include <string>
 
 CommandSurrender::CommandSurrender() {}
 

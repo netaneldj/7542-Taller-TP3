@@ -6,12 +6,10 @@
 #include <fstream>
 #include <sstream>
 
-#define ERROR_COMMAND "Error: comando inválido. Escriba AYUDA para obtener ayuda\n"
 #define ERROR_ARGS "Error: argumentos invalidos.\n"
 #define ERROR_OUT_OF_RANGE "Error: archivo con números fuera de rango\n"
 #define ERROR_FORMAT "Error: formato de los números inválidos\n"
 #define INVALID_MSG "Número inválido. Debe ser de 3 cifras no repetidas"
-#define HELP_MSG "Comandos válidos:\n\tAYUDA: despliega la lista de comandos válidos\n\tRENDIRSE: pierde el juego automáticamente\n\tXXX: Número de 3 cifras a ser enviado al servidor para adivinar el número secreto"
 #define LOSE_MSG "Perdiste"
 #define WIN_MSG "Ganaste"
 #define NUMBER_SIZE 4
@@ -25,7 +23,8 @@ void Protocol::send(Socket &skt, std::string message) {
 	if (message=="AYUDA") help.send(skt,message);
 	else if (message=="RENDIRSE") surrender.send(skt,message);
 	else if (isNumber(message)) number.send(skt,message);
-	else string.send(skt,message);
+	else
+		string.send(skt,message);
 }
 
 std::string Protocol::receive(Socket& skt) {
@@ -39,7 +38,8 @@ std::string Protocol::receive(Socket& skt) {
 	received = skt.recv(buffer1,1);
 	if (buffer1[0]=='h') response = help.receive(buffer1,received);
 	else if (buffer1[0]=='s') response = surrender.receive(buffer1,received);
-	else if (buffer1[0]=='n') {
+	else
+		if (buffer1[0]=='n') {
 		char buffer2[NUMBER_SIZE];
 		received = skt.recv(buffer2,NUMBER_SIZE);
 		response = number.receive(buffer2,received);
@@ -63,7 +63,9 @@ bool Protocol::validClientInput(std::string input) {
 	if (input=="RENDIRSE") return true;
 	if (isNumber(input) and input.length()<=4) return true;
 	if (not sizeArgs(input)) std::cout << ERROR_ARGS;
-	else std::cout << ERROR_COMMAND;
+	else
+		std::cout << "Error: comando inválido. "
+			"Escriba AYUDA para obtener ayuda\n";
 	return false;
 }
 
@@ -83,7 +85,8 @@ bool Protocol::validServerInput(std::string input) {
 	return true;
 }
 
-std::string Protocol::analyzeCoincidences(std::string input, std::string num, Score &score) {
+std::string Protocol::analyzeCoincidences(std::string input,
+		std::string num, Score &score) {
 	int good = 0, regular = 0;
 	std::string response;
 
@@ -92,19 +95,26 @@ std::string Protocol::analyzeCoincidences(std::string input, std::string num, Sc
 	for(std::string::size_type i = 0; i < input.size(); ++i) {
 	    size_t found = num.find(input[i]);
 	    if (found != std::string::npos) {
-	    	if (i==found) good++;
-	    	else regular++;
+	    	if (i==found) {
+	    		good++;
+	    	} else {
+	    		regular++;
+	    	}
 	    }
 	}
 
-	if (good > 0 and regular > 0) response = std::to_string(good) + " bien, " + std::to_string(regular) + " regular";
+	if (good > 0 and regular > 0)
+		response = std::to_string(good) + " bien, "
+		+ std::to_string(regular) + " regular";
 	else if (good > 0) response = std::to_string(good) + " bien";
 	else if (regular > 0) response = std::to_string(regular) + " regular";
-	else response = "3 mal";
+	else
+		response = "3 mal";
 	return response;
 }
 
-std::string Protocol::processClientRequest(std::string input, std::string num, int &chance, Score &score) {
+std::string Protocol::processClientRequest(std::string input,
+		std::string num, int &chance, Score &score) {
 	if (input==num) {
 		score.addWinner();
 		return WIN_MSG;
@@ -113,7 +123,11 @@ std::string Protocol::processClientRequest(std::string input, std::string num, i
 		score.addLoser();
 		return LOSE_MSG;
 	}
-	if (input=="AYUDA") return HELP_MSG;
+	if (input=="AYUDA") return "Comandos válidos:\n\t"
+			"AYUDA: despliega la lista de comandos válidos\n\t"
+			"RENDIRSE: pierde el juego automáticamente\n\t"
+			"XXX: Número de 3 cifras a ser enviado al servidor "
+			"para adivinar el número secreto";
     chance++;
     return this->analyzeCoincidences(input,num, score);
 }

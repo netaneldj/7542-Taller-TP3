@@ -7,12 +7,14 @@
 
 class TextFileInterpreter {
 public:
-	TextFileInterpreter(Protocol p, std::string fileName, std::vector<std::string> &list);
+	TextFileInterpreter(Protocol p,
+			std::string fileName, std::vector<std::string> &list);
 
 	~TextFileInterpreter();
 
 private:
-	void process(Protocol p, std::string fileName, std::vector<std::string> &list);
+	void process(Protocol p,
+			std::string fileName, std::vector<std::string> &list);
 };
 
 #endif /* SERVER_TEXTFILEINTERPRETER_H_ */

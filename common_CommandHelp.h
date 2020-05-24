@@ -2,6 +2,7 @@
 #define COMMON_COMMANDHELP_H_
 
 #include "common_Command.h"
+#include <string>
 
 class CommandHelp : public Command{
 public:

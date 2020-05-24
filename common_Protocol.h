@@ -23,9 +23,11 @@ public:
 
     std::string receive(Socket& skt);
 
-    std::string processClientRequest(std::string input, std::string num, int &chance, Score &score);
+    std::string processClientRequest(std::string input,
+    		std::string num, int &chance, Score &score);
 
-    std::string analyzeCoincidences(std::string input, std::string num, Score &score);
+    std::string analyzeCoincidences(std::string input,
+    		std::string num, Score &score);
 
 private:
     CommandHelp help;

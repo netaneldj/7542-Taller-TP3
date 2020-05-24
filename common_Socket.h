@@ -14,7 +14,6 @@
 #include <stdlib.h>
 
 class Socket {
-
 private:
     int s;
     int skt;
@@ -47,7 +46,6 @@ public:
     Socket(Socket &&other);
 
     Socket &operator=(Socket &&other);
-
 };
 
 #endif /* COMMON_SOCKET_H_ */

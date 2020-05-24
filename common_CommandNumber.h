@@ -2,6 +2,7 @@
 #define COMMON_COMMANDNUMBER_H_
 
 #include "common_Command.h"
+#include <string>
 
 class CommandNumber : public Command{
 public:
