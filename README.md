@@ -112,7 +112,7 @@ El Score es el marcador donde se computan los resultados de los juegos. Acá hay
 Diagrama ilustrativo
 ------------------------
 
-
+![\[fig:class01\]Proceso de Envio y Recepción de Mensajes](img/diagrama.png)
 
 Dificultades abordadas
 ------------------------
