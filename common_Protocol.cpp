@@ -123,11 +123,13 @@ std::string Protocol::processClientRequest(std::string input,
 		score.addLoser();
 		return LOSE_MSG;
 	}
-	if (input=="AYUDA") return "Comandos válidos:\n\t"
-			"AYUDA: despliega la lista de comandos válidos\n\t"
-			"RENDIRSE: pierde el juego automáticamente\n\t"
-			"XXX: Número de 3 cifras a ser enviado al servidor "
-			"para adivinar el número secreto";
+	if (input=="AYUDA") {
+		return "Comandos válidos:\n\t"
+				"AYUDA: despliega la lista de comandos válidos\n\t"
+				"RENDIRSE: pierde el juego automáticamente\n\t"
+				"XXX: Número de 3 cifras a ser enviado al servidor "
+				"para adivinar el número secreto";
+	}
     chance++;
     return this->analyzeCoincidences(input,num, score);
 }

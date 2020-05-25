@@ -2,6 +2,7 @@
 #define COMMON_COMMANDSTRING_H_
 
 #include "common_Command.h"
+#include <string>
 
 class CommandString : public Command {
 public:
