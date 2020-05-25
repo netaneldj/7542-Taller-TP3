@@ -54,6 +54,7 @@ std::string Protocol::receive(Socket& skt) {
 		buffer3= new char[received];
 		received = skt.recv(buffer3,received);
 		response = string.receive(buffer3,received);
+		delete buffer3;
 	}
     return response;
 }
