@@ -11,8 +11,12 @@ int main(int argc, char *argv[]) {
     }
     char *host = argv[ARGS_HOST];
     char *port = argv[ARGS_PORT];
-    Client client(host, port);
-    client.run();
+	try {
+	    Client client(host, port);
+	    client.run();
+	} catch (...) {
+		//nada
+	}
     return 0;
 }
 

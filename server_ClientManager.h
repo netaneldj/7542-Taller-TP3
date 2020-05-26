@@ -24,7 +24,7 @@ private:
     std::vector<std::string> numbers;
     std::list<ClientTalker*> clients;
 
-    void garbageCollector();
+    void deleteOldClients();
 };
 
 #endif /* SERVER_CLIENTMANAGER_H_ */

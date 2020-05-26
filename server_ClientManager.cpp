@@ -35,19 +35,19 @@ void ClientManager::run() {
         		std::move(clientSkt),numbers[(index%numbers.size())],s);
         client->start();
         clients.push_back(client);
-        garbageCollector();
+        deleteOldClients();
         index++;
     }
 }
 
-void ClientManager::garbageCollector() {
-    std::list<ClientTalker *>::iterator it = clients.begin();
-    while (it != clients.end()) {
-        if (!(*it)->isAlive()) {
-            delete *it;
-            it = clients.erase(it);
+void ClientManager::deleteOldClients() {
+    std::list<ClientTalker *>::iterator iterator = clients.begin();
+    while (iterator != clients.end()) {
+        if (!(*iterator)->isAlive()) {
+            delete *iterator;
+            iterator = clients.erase(iterator);
         } else {
-            it++;
+        	iterator++;
         }
     }
 }

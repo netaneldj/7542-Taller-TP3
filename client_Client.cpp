@@ -10,13 +10,17 @@ Client::~Client() {}
 
 void Client::run() {
     std::string input;
+    std::string response;
 
     while (std::getline(std::cin, input)) {
     	if (p.validClientInput(input)) {
         	this->send(input);
-            std::cout << this->receive() << "\n";
+        	response = this->receive();
+            std::cout << response << "\n";
+            if (response=="Ganaste" or response=="Perdiste") break;
         }
     }
+    this->skt.close();
 }
 
 void Client::send(std::string msg) {

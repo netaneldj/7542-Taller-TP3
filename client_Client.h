@@ -3,16 +3,15 @@
 
 #include <string>
 #include "common_Socket.h"
-#include "common_Thread.h"
 #include "common_Protocol.h"
 
-class Client : public Thread {
+class Client {
 public:
 	Client(char* host, char* port);
 
-	~Client() override;
+	~Client();
 
-	void run() override;
+	void run();
 
 private:
     Socket skt;
