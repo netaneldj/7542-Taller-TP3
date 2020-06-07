@@ -1,41 +1,35 @@
 #include "common_CommandNumber.h"
-#include <bits/stdc++.h>
+#include "common_Resources.h"
+#include "common_Socket.h"
 #include <iostream>
-#include <sstream>
 #include <string>
+#include <vector>
+
+#define BUFFER_SIZE 2
 
 CommandNumber::CommandNumber() {}
 
 CommandNumber::~CommandNumber() {}
 
-void CommandNumber::send(Socket &skt, std::string message) {
-	std::stringstream integer(message);
-	std::stringstream hex;
-	std::string temp;
-	const char* protocol;
-	int num;
+void CommandNumber::send(Socket &skt, std::string &message) {
+	char n = 'n';
+	skt.send(&n,1);
 
-	integer >> num;
-	hex << std::hex << num;
+	std::vector<unsigned char> vhex = bigEndianFromShortDec(std::stoi(message));
 
-	temp = hex.str() + 'n';
-	std::reverse(temp.begin(),temp.end());
+	char* hex = reinterpret_cast<char*>(vhex.data());
 
-	while (temp.length()<5)temp.append("0");
-
-	protocol = temp.c_str();
-	skt.send(protocol,temp.length());
+	skt.send(hex,BUFFER_SIZE);
 }
 
-std::string CommandNumber::receive(char* response, size_t length) {
-	std::stringstream ss;
-	unsigned int num;
-	std::string msg;
+std::string CommandNumber::receive(Socket &skt) {
+	char buffer[BUFFER_SIZE];
+	skt.recv(buffer,BUFFER_SIZE);
 
-	msg = response;
-	std::reverse(msg.begin(),msg.end());
-	num = stoi(msg, 0, 16);
-	msg = std::to_string(num);
-	return msg;
+	std::vector<unsigned char> vhex;
+	vhex.assign(buffer,buffer+BUFFER_SIZE);
+
+	unsigned int num = bigEndianToShortDec(vhex);
+	return std::to_string(num);
 }
 

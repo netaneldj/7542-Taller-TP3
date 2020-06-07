@@ -1,7 +1,5 @@
 #include "server_Server.h"
-#include "common_Score.h"
 #include <iostream>
-#include <mutex>
 
 #define ARGS_PORT 1
 #define ARGS_NUMS 2
@@ -13,10 +11,8 @@ int main(int argc, char *argv[]) {
     }
     char* port = argv[ARGS_PORT];
     char* numsFileName = argv[ARGS_NUMS];
-    std::mutex m;
     try {
-    	Score s(m);
-        Server server(port, numsFileName, s);
+        Server server(port, numsFileName);
         server.run();
         return 0;
     } catch(...) {

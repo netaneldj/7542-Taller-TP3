@@ -2,10 +2,11 @@
 #include "server_TextFileInterpreter.h"
 #include <vector>
 #include <iostream>
+#include <mutex>
 #include "server_ClientManager.h"
 
-Server::Server(char* port, char* fileName, Score &s) :
-s(s), interpreter(this->p, fileName, numbers), manager(port, numbers, s) {
+Server::Server(char* port, char* fileName) :
+s(m), interpreter(fileName, numbers), manager(port, numbers, s) {
 	this->manager.start();
 }
 

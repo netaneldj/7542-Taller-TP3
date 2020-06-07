@@ -2,6 +2,7 @@
 #define COMMON_COMMAND_H_
 
 #include "common_Socket.h"
+#include <bits/unique_ptr.h>
 #include <string>
 
 class Command {
@@ -10,11 +11,15 @@ public:
 
 	virtual ~Command();
 
+    static std::unique_ptr<Command> getCommand(std::string &message);
+
+    static std::unique_ptr<Command> getCommand(Socket &skt, char type);
+
 	//Envia el mensaje convertido a formato protocolo
-	virtual void send(Socket &skt, std::string message);
+	virtual void send(Socket &skt, std::string &message);
 
 	//Devuelve el mensaje en formato string
-	virtual std::string receive(char* response, size_t length);
+	virtual std::string receive(Socket &skt);
 };
 
 #endif /* COMMON_COMMAND_H_ */

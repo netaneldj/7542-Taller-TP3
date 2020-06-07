@@ -3,11 +3,10 @@
 #include "common_Protocol.h"
 #include <utility>
 #include <string>
+#include "common_Guesser.h"
+#include "common_Resources.h"
 
-#define LOSE_MSG "Perdiste"
-#define WIN_MSG "Ganaste"
-
-ClientTalker::ClientTalker(Socket socket, std::string num, Score &s) : s(s) {
+ClientTalker::ClientTalker(Socket socket, std::string &num, Score &s) : s(s) {
 	this->skt = std::move(socket);
 	this->num = num;
 	this->chance = 1;
@@ -22,8 +21,10 @@ ClientTalker::~ClientTalker() {
 void ClientTalker::run() {
     while (this->alive) {
         std::string request = receive();
-        std::string response = p.processClientRequest(request,num,chance,s);
+        std::string response = g.processClientRequest(request,num,chance);
         send(response);
+        if (response==WIN_MSG) s.addWinner();
+        else if (response==LOSE_MSG) s.addLoser();
         if (response==LOSE_MSG or response==WIN_MSG)this->alive = false;
     }
 }

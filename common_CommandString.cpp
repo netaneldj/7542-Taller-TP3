@@ -1,31 +1,42 @@
 #include "common_CommandString.h"
-#include <bits/stdc++.h>
+#include "common_Resources.h"
+#include "common_Socket.h"
 #include <iostream>
-#include <sstream>
 #include <string>
+#include <vector>
+
+#define HEADER_SIZE 4
 
 CommandString::CommandString() {}
 
 CommandString::~CommandString() {}
 
-void CommandString::send(Socket &skt, std::string message) {
-	std::stringstream hex;
-	std::string temp;
-	const char* protocol;
+void CommandString::send(Socket &skt, std::string &message) {
+	const char* msg;
 
-	hex << std::hex << message.length();
-	temp = hex.str();
-	std::reverse(temp.begin(),temp.end());
-	while (temp.length()<4)temp.append("0");
-	temp.append(message);
-	protocol = temp.c_str();
-	skt.send(protocol,temp.length());
+	std::vector<unsigned char> mlength = bigEndianFromLongDec(message.length());
+	char* hex = reinterpret_cast<char*>(mlength.data());
+	skt.send(hex,HEADER_SIZE);
+
+	msg = message.c_str();
+	skt.send(msg,message.length());
 }
 
-std::string CommandString::receive(char* response, size_t length) {
-	std::string msg = "";
+std::string CommandString::receive(Socket &skt) {
+	char header[HEADER_SIZE];
+	skt.recv(header,HEADER_SIZE);
 
-	for (size_t i=0; i<length; i++) msg+=response[i];
-	return msg;
+	std::vector<unsigned char> vlength;
+	vlength.assign(header,header+HEADER_SIZE);
+
+	unsigned int length = bigEndianToLongDec(vlength);
+
+	char* body;
+	body = new char[length];
+	skt.recv(body,length);
+	std::string response(body,length);
+	delete[] body;
+
+    return response;
 }
 

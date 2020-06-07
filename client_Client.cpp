@@ -1,4 +1,6 @@
 #include "client_Client.h"
+#include "common_Guesser.h"
+#include "common_Resources.h"
 #include <iostream>
 #include <fstream>
 
@@ -6,29 +8,30 @@ Client::Client(char* host, char* port) {
 	this->skt.connect(host, port);
 }
 
-Client::~Client() {}
+Client::~Client() {
+    this->skt.close();
+}
 
 void Client::run() {
     std::string input;
     std::string response;
 
     while (std::getline(std::cin, input)) {
-    	if (p.validClientInput(input)) {
+    	if (g.validClientInput(input)) {
         	this->send(input);
         	response = this->receive();
             std::cout << response << "\n";
-            if (response=="Ganaste" or response=="Perdiste") break;
+            if (response==WIN_MSG or response==LOSE_MSG) break;
         }
     }
-    this->skt.close();
 }
 
-void Client::send(std::string msg) {
+void Client::send(std::string &msg) {
     p.send(this->skt, msg);
 }
 
 std::string Client::receive() {
-    return p.receive(this->skt);
+    return p.receive(this->skt,'T');
 }
 
 

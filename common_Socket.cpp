@@ -2,7 +2,6 @@
 #include <cstring>
 #include <unistd.h>
 #include <stdexcept>
-#include <iostream>
 
 #define ACCEPT_QUEUE_LEN 10
 

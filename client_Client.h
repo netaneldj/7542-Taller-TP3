@@ -4,6 +4,7 @@
 #include <string>
 #include "common_Socket.h"
 #include "common_Protocol.h"
+#include "common_Guesser.h"
 
 class Client {
 public:
@@ -18,7 +19,9 @@ private:
 
     Protocol p;
 
-    void send(std::string msg);
+    Guesser g;
+
+    void send(std::string &msg);
 
     std::string receive();
 };

@@ -1,9 +1,9 @@
 #ifndef SERVER_CLIENTMANAGER_H_
 #define SERVER_CLIENTMANAGER_H_
 
+#include "server_Score.h"
 #include "common_Thread.h"
 #include "common_Socket.h"
-#include "common_Score.h"
 #include "server_ClientTalker.h"
 #include <vector>
 #include <string>
