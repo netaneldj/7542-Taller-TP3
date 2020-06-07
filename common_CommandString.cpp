@@ -12,13 +12,11 @@ CommandString::CommandString() {}
 CommandString::~CommandString() {}
 
 void CommandString::send(Socket &skt, std::string &message) {
-	const char* msg;
-
 	std::vector<unsigned char> mlength = bigEndianFromLongDec(message.length());
 	char* hex = reinterpret_cast<char*>(mlength.data());
 	skt.send(hex,HEADER_SIZE);
 
-	msg = message.c_str();
+	const char* msg = message.c_str();
 	skt.send(msg,message.length());
 }
 

@@ -13,11 +13,16 @@ s(m), interpreter(fileName, numbers), manager(port, numbers, s) {
 Server::~Server() {}
 
 void Server::run() {
-    std::string input;
-    while (input != "q") {
-        std::cin >> input;
-    }
-    s.show();
+	try {
+	    std::string input;
+	    while (input != "q") {
+	        std::cin >> input;
+	    }
+	    this->manager.stop();
+	    s.show();
+	} catch (...) {
+		std::cerr << "Failed Server Run" << std::endl;
+	}
 }
 
 

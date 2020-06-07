@@ -13,16 +13,20 @@ Client::~Client() {
 }
 
 void Client::run() {
-    std::string input;
-    std::string response;
+    try {
+        std::string input;
+        std::string response;
 
-    while (std::getline(std::cin, input)) {
-    	if (g.validClientInput(input)) {
-        	this->send(input);
-        	response = this->receive();
-            std::cout << response << "\n";
-            if (response==WIN_MSG or response==LOSE_MSG) break;
+        while (std::getline(std::cin, input)) {
+        	if (g.validClientInput(input)) {
+            	this->send(input);
+            	response = this->receive();
+                std::cout << response << "\n";
+                if (response==WIN_MSG or response==LOSE_MSG) break;
+            }
         }
+    } catch (...) {
+    	std::cerr << "Failed Client Run" << std::endl;
     }
 }
 

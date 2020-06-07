@@ -15,9 +15,9 @@
 
 bool isNumber(const std::string &s);
 
-uint32_t bigEndianToLongDec(std::vector<unsigned char> buffer);
+uint32_t bigEndianToLongDec(std::vector<unsigned char> hex);
 
-uint16_t bigEndianToShortDec(std::vector<unsigned char> number);
+uint16_t bigEndianToShortDec(std::vector<unsigned char> hex);
 
 std::vector<unsigned char> bigEndianFromShortDec(uint16_t num);
 

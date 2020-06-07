@@ -12,6 +12,7 @@ ClientManager::ClientManager(char* port,
     this->skt_s = std::move(serverSocket);
     this->skt_s.listen();
     this->index = 0;
+    this->alive = true;
 }
 
 ClientManager::~ClientManager() {
@@ -23,20 +24,23 @@ ClientManager::~ClientManager() {
 }
 
 void ClientManager::run() {
-    while (true) {
-        Socket clientSkt;
-        try {
+    try {
+    	while (this->isAlive()) {
+            Socket clientSkt;
             clientSkt = this->skt_s.accept();
+            ClientTalker *client = new ClientTalker(
+            		std::move(clientSkt),numbers[(index%numbers.size())],s);
+            client->start();
+            clients.push_back(client);
+            deleteOldClients();
+            index++;
         }
-        catch (...) {
-            break;
-        }
-        ClientTalker *client = new ClientTalker(
-        		std::move(clientSkt),numbers[(index%numbers.size())],s);
-        client->start();
-        clients.push_back(client);
-        deleteOldClients();
-        index++;
+    }
+    catch (std::invalid_argument &e) {
+        //nothing
+    }
+    catch (...) {
+        std::cerr << "Failed ClientManager Run" << std::endl;
     }
 }
 
@@ -50,5 +54,13 @@ void ClientManager::deleteOldClients() {
         	iterator++;
         }
     }
+}
+
+bool ClientManager::isAlive() {
+    return this->alive;
+}
+
+void ClientManager::stop() {
+    this->alive = false;
 }
 

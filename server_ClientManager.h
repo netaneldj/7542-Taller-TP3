@@ -17,10 +17,15 @@ public:
 
     void run() override;
 
+    bool isAlive();
+
+    void stop();
+
 private:
     Socket skt_s;
     Score &s;
     int index;
+    bool alive;
     std::vector<std::string> numbers;
     std::list<ClientTalker*> clients;
 

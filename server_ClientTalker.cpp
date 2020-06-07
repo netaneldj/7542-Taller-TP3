@@ -19,14 +19,18 @@ ClientTalker::~ClientTalker() {
 }
 
 void ClientTalker::run() {
-    while (this->alive) {
-        std::string request = receive();
-        std::string response = g.processClientRequest(request,num,chance);
-        send(response);
-        if (response==WIN_MSG) s.addWinner();
-        else if (response==LOSE_MSG) s.addLoser();
-        if (response==LOSE_MSG or response==WIN_MSG)this->alive = false;
-    }
+	try {
+	    while (this->isAlive()) {
+	        std::string request = receive();
+	        std::string response = g.processClientRequest(request,num,chance);
+	        send(response);
+	        if (response==WIN_MSG) s.addWinner();
+	        else if (response==LOSE_MSG) s.addLoser();
+	        if (response==LOSE_MSG or response==WIN_MSG)this->alive = false;
+	    }
+	} catch (...) {
+		std::cerr << "Failed ClientTalker Run" << std::endl;
+	}
 }
 
 std::string ClientTalker::receive() {

@@ -38,10 +38,10 @@ bool Guesser::validServerInput(std::string &input) {
 
 std::string Guesser::analyzeCoincidences(std::string &input,
 		std::string &num) {
+	if (input.size()!=3 or repeat(input)) return INVALID_MSG;
+
 	int good = 0, regular = 0;
 	std::string response;
-
-	if (input.size()!=3 or repeat(input)) return INVALID_MSG;
 
 	for(std::string::size_type i = 0; i < input.size(); ++i) {
 	    size_t found = num.find(input[i]);
@@ -106,9 +106,6 @@ bool Guesser::repeat(std::string &value) {
 }
 
 bool Guesser::sizeNum(std::string &value) {
-	if (value.length() > 5) return false;
-	std::stringstream hex;
-	hex << std::hex << std::stoi(value);
-	return hex.str().length()<=4;
+	return std::stoi(value)<=UINT16_MAX;
 }
 

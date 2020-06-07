@@ -5,18 +5,20 @@
 #define ARGS_PORT 2
 
 int main(int argc, char *argv[]) {
-	if (argc != 3) {
-        std::cout << "Uso: ./client <host> <puerto>\n";
-        return 1;
-    }
-    char *host = argv[ARGS_HOST];
-    char *port = argv[ARGS_PORT];
 	try {
-	    Client client(host, port);
-	    client.run();
+		if (argc != 3) {
+			std::cout << "Uso: ./client <host> <puerto>\n";
+			return 0;
+		}
+
+		char *host = argv[ARGS_HOST];
+		char *port = argv[ARGS_PORT];
+
+		Client client(host, port);
+		client.run();
 	} catch (...) {
-		//nada
+		std::cerr << "Failen Client main" << std::endl;
 	}
-    return 0;
+	return 0;
 }
 
