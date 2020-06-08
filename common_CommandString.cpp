@@ -14,10 +14,10 @@ CommandString::~CommandString() {}
 void CommandString::send(Socket &skt, std::string &message) {
 	std::vector<unsigned char> mlength = bigEndianFromLongDec(message.length());
 	char* hex = reinterpret_cast<char*>(mlength.data());
-	skt.send(hex,HEADER_SIZE);
+	skt(hex,HEADER_SIZE);
 
 	const char* msg = message.c_str();
-	skt.send(msg,message.length());
+	skt(msg,message.length());
 }
 
 std::string CommandString::receive(Socket &skt) {

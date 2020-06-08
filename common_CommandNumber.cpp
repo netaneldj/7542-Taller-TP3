@@ -13,13 +13,13 @@ CommandNumber::~CommandNumber() {}
 
 void CommandNumber::send(Socket &skt, std::string &message) {
 	char n = 'n';
-	skt.send(&n,1);
+	skt(&n,1);
 
 	std::vector<unsigned char> vhex = bigEndianFromShortDec(std::stoi(message));
 
 	char* hex = reinterpret_cast<char*>(vhex.data());
 
-	skt.send(hex,BUFFER_SIZE);
+	skt(hex,BUFFER_SIZE);
 }
 
 std::string CommandNumber::receive(Socket &skt) {

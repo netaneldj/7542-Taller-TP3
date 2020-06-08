@@ -1,5 +1,4 @@
 #include "server_TextFileInterpreter.h"
-
 #include <iostream>
 #include <fstream>
 

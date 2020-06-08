@@ -24,24 +24,29 @@ ClientManager::~ClientManager() {
 }
 
 void ClientManager::run() {
-    try {
-    	while (this->isAlive()) {
-            Socket clientSkt;
-            clientSkt = this->skt_s.accept();
-            ClientTalker *client = new ClientTalker(
-            		std::move(clientSkt),numbers[(index%numbers.size())],s);
-            client->start();
-            clients.push_back(client);
-            deleteOldClients();
-            index++;
-        }
-    }
-    catch (std::invalid_argument &e) {
-        //nothing
-    }
-    catch (...) {
-        std::cerr << "Failed ClientManager Run" << std::endl;
-    }
+	while (this->isAlive()) {
+	    try {
+			Socket clientSkt;
+			clientSkt = this->skt_s.accept();
+			ClientTalker *client = new ClientTalker(
+					std::move(clientSkt),numbers[(index%numbers.size())],s);
+			client->start();
+			clients.push_back(client);
+			deleteOldClients();
+			index++;
+	    }
+	    catch (SocketError &e) {
+	        continue;
+	    }
+	    catch (std::exception &e) {
+	        std::cerr << e.what() << std::endl;
+	        break;
+	    }
+	    catch (...) {
+	        std::cerr << "Unknown Error on ClientManager Run" << std::endl;
+	        break;
+	    }
+	}
 }
 
 void ClientManager::deleteOldClients() {

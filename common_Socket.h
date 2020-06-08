@@ -12,6 +12,19 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <stdlib.h>
+#include <typeinfo>
+
+#define SKT_ERROR_BUFF_LEN 256
+
+class SocketError : public std::exception {
+	private:
+		char msg_error[SKT_ERROR_BUFF_LEN];
+
+	public:
+		SocketError() throw();
+		const char* what() const throw();
+		~SocketError() throw();
+};
 
 class Socket {
 
@@ -47,6 +60,8 @@ public:
     Socket(Socket &&other);
 
     Socket &operator=(Socket &&other);
+
+    int operator()(const char* msg, size_t length);
 
 };
 

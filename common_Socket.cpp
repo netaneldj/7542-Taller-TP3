@@ -4,6 +4,22 @@
 #include <stdexcept>
 
 #define ACCEPT_QUEUE_LEN 10
+#define SKT_ERROR -1
+
+SocketError::SocketError() throw() {
+	int _errno = errno;
+
+	const char *m = strerror(_errno);
+	strncpy(msg_error, m, SKT_ERROR_BUFF_LEN);
+
+	msg_error[SKT_ERROR_BUFF_LEN - 1] = '\0';
+}
+
+const char* SocketError::what() const throw() {
+	return msg_error;
+}
+
+SocketError::~SocketError() throw() {}
 
 Socket::Socket() {
 	this->s = 0;
@@ -20,6 +36,7 @@ Socket::Socket(int skt) {
 }
 
 Socket::~Socket() {
+	if (this->skt != SKT_ERROR) this->close();
     this->s = -1;
     this->skt = -1;
 }
@@ -32,10 +49,7 @@ bool Socket::addrinfo(char *host, char* port) {
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_flags = 0;
 	this->s = getaddrinfo(host, port, &hints, &this->addr);
-   	if (this->s != 0) {
-      		printf("Error in getaddrinfo: %s\n", gai_strerror(this->skt));
-      		return false;
-   	}
+   	if (this->s != 0) throw SocketError();
    	return true;
 }
 
@@ -51,14 +65,14 @@ bool Socket::connect(char* host, char* port) {
    		 !are_we_connected; this->ptr=this->ptr->ai_next) {
    		this->skt = socket(this->ptr->ai_family,
    				this->ptr->ai_socktype, this->ptr->ai_protocol);
-      	if (this->skt == -1) {
-      		printf("Error: %s\n", strerror(errno));
-      	} else {
+      	if (this->skt == SKT_ERROR) {
+      		throw SocketError();
+   		} else {
       		this->s = ::connect(this->skt,
       				this->ptr->ai_addr, this->ptr->ai_addrlen);
-      		if (this->s == -1) {
-			printf("Error: %s\n", strerror(errno));
-			::close(this->skt);
+      		if (this->s == SKT_ERROR) {
+      			::close(this->skt);
+      			throw SocketError();
       		}
       		are_we_connected = (this->s != -1);
       }
@@ -81,14 +95,14 @@ bool Socket::bind(char *port) {
    		 !are_we_binded; this->ptr=this->ptr->ai_next) {
    		this->skt = socket(this->ptr->ai_family,
    				this->ptr->ai_socktype, this->ptr->ai_protocol);
-      	if (this->skt == -1) {
-      		printf("Error: %s\n", strerror(errno));
+      	if (this->skt == SKT_ERROR) {
+      		throw SocketError();
       	} else {
       		this->s = ::bind(this->skt,
       				this->addr->ai_addr, this->addr->ai_addrlen);
-      		if (this->s == -1) {
-			printf("Error: %s\n", strerror(errno));
-			::close(this->skt);
+      		if (this->s == SKT_ERROR) {
+      			::close(this->skt);
+      			throw SocketError();
       		}
       		are_we_binded = (this->s != -1);
       }
@@ -102,16 +116,13 @@ bool Socket::bind(char *port) {
 
 bool Socket::listen() {
     this->s = ::listen(this->skt, ACCEPT_QUEUE_LEN);
-    if (this->s == -1) {
-        return false;
-    }
+    if (this->s == SKT_ERROR) throw SocketError();
     return true;
 }
 
 Socket Socket::accept() {
 	int skt_a = ::accept(this->skt, nullptr, nullptr);
-	if (skt_a == -1)
-		throw std::invalid_argument("socket closed");
+	if (skt_a == SKT_ERROR) throw SocketError();
 	return Socket(skt_a);
 }
 
@@ -167,4 +178,8 @@ Socket &Socket::operator=(Socket &&other) {
     this->skt = other.skt;
     other.skt = -1;
     return *this;
+}
+
+int Socket::operator()(const char* msg, size_t length) {
+	return this->send(msg,length);
 }

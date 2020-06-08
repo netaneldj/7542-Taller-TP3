@@ -1,9 +1,10 @@
 #include "server_Server.h"
 #include "server_TextFileInterpreter.h"
+#include "server_ClientManager.h"
 #include <vector>
 #include <iostream>
 #include <mutex>
-#include "server_ClientManager.h"
+
 
 Server::Server(char* port, char* fileName) :
 s(m), interpreter(fileName, numbers), manager(port, numbers, s) {
@@ -20,8 +21,10 @@ void Server::run() {
 	    }
 	    this->manager.stop();
 	    s.show();
+	} catch (std::exception &e) {
+		std::cerr << e.what() << std::endl;
 	} catch (...) {
-		std::cerr << "Failed Server Run" << std::endl;
+		std::cerr << "Unknown Error on Server Run" << std::endl;
 	}
 }
 

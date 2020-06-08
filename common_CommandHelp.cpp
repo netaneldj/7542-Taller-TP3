@@ -9,7 +9,7 @@ CommandHelp::~CommandHelp() {}
 
 void CommandHelp::send(Socket &skt, std::string &message) {
 	char msg = 'h';
-	skt.send(&msg,sizeof(msg));
+	skt(&msg,sizeof(msg));
 }
 
 std::string CommandHelp::receive(Socket &skt) {

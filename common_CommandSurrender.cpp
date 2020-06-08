@@ -9,7 +9,7 @@ CommandSurrender::~CommandSurrender() {}
 void CommandSurrender::send(Socket &skt, std::string &message) {
 	char msg = 's';
 
-	skt.send(&msg,sizeof(msg));
+	skt(&msg,sizeof(msg));
 }
 
 std::string CommandSurrender::receive(Socket &skt) {
