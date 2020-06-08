@@ -106,6 +106,7 @@ bool Guesser::repeat(std::string &value) {
 }
 
 bool Guesser::sizeNum(std::string &value) {
+	if (value.length() > 5) return false;
 	return std::stoi(value)<=UINT16_MAX;
 }
 

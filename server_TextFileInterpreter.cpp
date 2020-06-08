@@ -2,13 +2,15 @@
 #include <iostream>
 #include <fstream>
 
-TextFileInterpreter::TextFileInterpreter(std::string fileName, std::vector<std::string> &list) {
+TextFileInterpreter::TextFileInterpreter(std::string fileName,
+		std::vector<std::string> &list) {
 	this->process(fileName,list);
 }
 
 TextFileInterpreter::~TextFileInterpreter(){}
 
-void TextFileInterpreter::process(std::string fileName, std::vector<std::string> &list) {
+void TextFileInterpreter::process(std::string fileName,
+		std::vector<std::string> &list) {
 	std::ifstream File(fileName);
 	std::string line;
 

@@ -4,6 +4,7 @@
 #include "common_CommandString.h"
 #include "common_CommandSurrender.h"
 #include "common_Resources.h"
+#include <memory>
 
 Command::Command() {}
 
@@ -27,9 +28,12 @@ Command::getCommand(Socket &skt, char type) {
 	char header[1] = "";
 	skt.recv(header,1);
 
-	if (header[0]=='h') return std::unique_ptr<Command>(new CommandHelp());
-	else if (header[0]=='s') return std::unique_ptr<Command>(new CommandSurrender());
-	else if (header[0]=='n') return std::unique_ptr<Command>(new CommandNumber());
+	if (header[0]=='h')
+		return std::unique_ptr<Command>(new CommandHelp());
+	else if (header[0]=='s')
+		return std::unique_ptr<Command>(new CommandSurrender());
+	else if (header[0]=='n')
+		return std::unique_ptr<Command>(new CommandNumber());
 	return NULL;
 }
 

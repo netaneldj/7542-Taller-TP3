@@ -4,6 +4,7 @@
 #include "common_Socket.h"
 #include <bits/unique_ptr.h>
 #include <string>
+#include <memory>
 
 class Command {
 public:

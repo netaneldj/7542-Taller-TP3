@@ -36,7 +36,9 @@ Socket::Socket(int skt) {
 }
 
 Socket::~Socket() {
-	if (this->skt != SKT_ERROR) this->close();
+	if (this->skt != SKT_ERROR) {
+		this->close();
+	}
     this->s = -1;
     this->skt = -1;
 }

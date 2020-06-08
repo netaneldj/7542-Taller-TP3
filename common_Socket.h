@@ -27,7 +27,6 @@ class SocketError : public std::exception {
 };
 
 class Socket {
-
 private:
     int s;
     int skt;
@@ -37,7 +36,7 @@ private:
 public:
     Socket();
 
-    Socket(int skt);
+    explicit Socket(int skt);
 
     ~Socket();
 
@@ -62,7 +61,6 @@ public:
     Socket &operator=(Socket &&other);
 
     int operator()(const char* msg, size_t length);
-
 };
 
 #endif /* COMMON_SOCKET_H_ */

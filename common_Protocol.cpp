@@ -3,6 +3,7 @@
 #include "common_Command.h"
 #include <bits/unique_ptr.h>
 #include <iostream>
+#include <memory>
 
 Protocol::Protocol() {}
 
